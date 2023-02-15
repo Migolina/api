@@ -112,18 +112,16 @@ if __name__ == "__main__":
 
     meta_insights = MetaInsights(
         account=my_account,
-        fields=ad_fields,
-        level="ad"
+        fields=account_fields,
+        level="account"
         )
 
-    insert_result = meta_insights.insert_ad_timeseries(days=31)
+
+    insert_result = meta_insights.insert_levels("accounts")
+    #insert_result = meta_insights.insert_ad_timeseries(days=31)
 
 
     #monthly_ads = meta_insights.get_ad_timeseries(31)
-
-    #print(monthly_ads)
-
-    #insights = Insights(account=my_account,levels=["ad","adset","campaign","account"],since="2023-02-01",until="2023-02-12",fields=fields)
 
 
 
