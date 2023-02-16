@@ -20,7 +20,7 @@ if __name__ == "__main__":
     FacebookAdsApi.init(app_id, app_secret, access_token)
     my_account = AdAccount(account)
 
-    ad_fields = [
+    all_fields = [
         AdsInsights.Field.account_id,
         AdsInsights.Field.account_name,
         AdsInsights.Field.campaign_id,
@@ -67,17 +67,17 @@ if __name__ == "__main__":
         AdsInsights.Field.reach,
         AdsInsights.Field.social_spend,
         AdsInsights.Field.spend,
-        AdsInsights.Field.website_purchase_roas
-        # AdsInsights.Field.website_ctr
-        # AdsInsights.Field.video_30_sec_watched_actions
-        # AdsInsights.Field.outbound_clicks_ctr
-        # AdsInsights.Field.outbound_clicks
-        # AdsInsights.Field.cost_per_unique_outbound_click
-        # AdsInsights.Field.cost_per_unique_action_type
-        # AdsInsights.Field.cost_per_thruplay
-        # AdsInsights.Field.cost_per_outbound_click
-        # AdsInsights.Field.actions
-        # AdsInsights.Field.cost_per_action_type
+        AdsInsights.Field.website_purchase_roas,
+        AdsInsights.Field.website_ctr,
+        AdsInsights.Field.video_30_sec_watched_actions,
+        AdsInsights.Field.outbound_clicks_ctr,
+        AdsInsights.Field.outbound_clicks,
+        AdsInsights.Field.cost_per_unique_outbound_click,
+        AdsInsights.Field.cost_per_unique_action_type,
+        AdsInsights.Field.cost_per_thruplay,
+        AdsInsights.Field.cost_per_outbound_click,
+        AdsInsights.Field.actions,
+        AdsInsights.Field.cost_per_action_type
     ]
 
     account_fields = [
@@ -90,38 +90,32 @@ if __name__ == "__main__":
         AdsInsights.Field.campaign_name
     ]
 
-    ad_fields = [AdsInsights.Field.ad_id,
-              AdsInsights.Field.adset_id,
-              AdsInsights.Field.ad_name,
-              AdsInsights.Field.account_currency,
-              AdsInsights.Field.actions,
-              AdsInsights.Field.cost_per_outbound_click,
-              AdsInsights.Field.outbound_clicks,
-              AdsInsights.Field.date_start,
-              AdsInsights.Field.date_stop,
-              AdsInsights.Field.spend,
-              AdsInsights.Field.clicks,
-              AdsInsights.Field.cpc,
-              AdsInsights.Field.ctr,
-              AdsInsights.Field.buying_type,
-              AdsInsights.Field.frequency,
-              AdsInsights.Field.full_view_reach,
-              AdsInsights.Field.impressions,
-              AdsInsights.Field.cost_per_inline_link_click,
-              AdsInsights.Field.dda_results]
+    ad_fields = [
+        AdsInsights.Field.ad_id,
+        AdsInsights.Field.date_start,
+        AdsInsights.Field.impressions,
+        AdsInsights.Field.clicks,
+        AdsInsights.Field.spend,
+        AdsInsights.Field.actions,
+        AdsInsights.Field.frequency
+    ]
 
     meta_insights = MetaInsights(
         account=my_account,
-        fields=account_fields,
-        level="account"
+        fields=ad_fields,
+        level="ad"
         )
 
-
-    insert_result = meta_insights.insert_levels("accounts")
-    #insert_result = meta_insights.insert_ad_timeseries(days=31)
+    meta_insights.insert_daily_ad_series()
 
 
-    #monthly_ads = meta_insights.get_ad_timeseries(31)
+
+
+
+
+
+
+
 
 
 
