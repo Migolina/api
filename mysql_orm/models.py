@@ -37,6 +37,8 @@ class Ads(Base):
     ad_name = Column(VARCHAR(250))
     adsets = relationship("Adsets",back_populates = "ads")
     ad_series = relationship("AdSeries",back_populates="ads")
+    age_and_gender = relationship("AgeGender",back_populates="ads")
+    country = relationship("Country", back_populates="ads")
 
 class AdSeries(Base):
     __tablename__ = "ad_series"
@@ -64,7 +66,7 @@ class AdSeries(Base):
 class AgeGender(Base):
     __tablename__ = "age_and_gender"
     id = Column(MEDIUMINT,primary_key=True,nullable=False)
-    ad_id = Column(VARCHAR(18),ForeignKey("ads.ad_id"))
+    ad_id = Column(VARCHAR(18),ForeignKey("ads.ad_id"),nullable=False)
     age = Column(VARCHAR(5))
     gender = Column(VARCHAR(6))
     date = Column(DATE)
@@ -77,7 +79,41 @@ class AgeGender(Base):
     post_reaction = Column(SMALLINT)
     landing_page_view = Column(SMALLINT)
     post_engagement = Column(SMALLINT)
+    leadgen_grouped = Column(SMALLINT)
+    lead = Column(SMALLINT)
+    page_engagement = Column(BIGINT)
     onsite_conversion_post_save = Column(SMALLINT)
+    onsite_conversion_lead_grouped = Column(BIGINT)
+    offsite_conversion_fb_pixel_lead = Column(BIGINT)
+    frequency = Column(FLOAT)
+    ads = relationship("Ads", back_populates="age_and_gender")
+
+
+class Country(Base):
+    __tablename__ = "country"
+    id = Column(MEDIUMINT, primary_key=True, nullable=False)
+    ad_id = Column(VARCHAR(18),ForeignKey("ads.ad_id"),nullable=False)
+    country = Column(VARCHAR(5))
+    date = Column(DATE)
+    impressions = Column(SMALLINT)
+    clicks = Column(SMALLINT)
+    total_spend = Column(FLOAT)
+    video_view = Column(SMALLINT)
+    comment = Column(SMALLINT)
+    link_click = Column(SMALLINT)
+    post_reaction = Column(SMALLINT)
+    landing_page_view = Column(SMALLINT)
+    post_engagement = Column(SMALLINT)
+    leadgen_grouped = Column(SMALLINT)
+    lead = Column(SMALLINT)
+    page_engagement = Column(BIGINT)
+    onsite_conversion_post_save = Column(SMALLINT)
+    onsite_conversion_lead_grouped = Column(BIGINT)
+    offsite_conversion_fb_pixel_lead = Column(BIGINT)
+    frequency = Column(FLOAT)
+    ads = relationship("Ads", back_populates="country")
+
+
 
 
 

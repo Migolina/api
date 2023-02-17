@@ -1,8 +1,15 @@
-import json
 
-def jsonify_list(object):
-    object = [dict(item) for item in object]
-    return json.dumps(object)
+def get_actions_dict(insights):
+    actions = {}
+    for ad in insights:
+        if ad.get("actions", None):
+            for _type in ad["actions"]:
+                actions[_type["action_type"]] = _type["value"]
+
+    return actions
+
+
+
 
 
 

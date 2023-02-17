@@ -106,7 +106,11 @@ if __name__ == "__main__":
         level="ad"
         )
 
-    meta_insights.insert_daily_ad_series()
+    #meta_insights.insert_daily_ad_series()
+    #meta_insights.insert_daily_age_gender()
+    meta_insights.insert_daily_country()
+
+
 
 
 
