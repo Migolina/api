@@ -139,7 +139,49 @@ class MetaInsights:
             session.add(country)
             session.commit()
 
-     def update_weekly_ad_series(self):
+         def update_weekly_ad_series(self):
+
+        for i in range(1, 8):
+            day_decrease = timedelta(days=i)
+            date_to_use = today
+            date_to_use = date_to_use - day_decrease
+            strdate = str(date_to_use.year) + '-' + str(date_to_use.month) + '-' + str(date_to_use.day)
+
+            params = {
+                "level": self.level,
+                'time_range': {'since': strdate, 'until': strdate},
+            }
+
+            weekly_ad_series = self.account.get_insights(params=params, fields=self.fields)
+            weekly_ad_series = [dict(item) for item in weekly_ad_series]
+            actions = {}
+            for ad in weekly_ad_series:
+                if ad.get("actions", None):
+                    for _type in ad["actions"]:
+                        actions[_type["action_type"]] = _type["value"]
+
+                session.query(AdSeries).filter(AdSeries.ad_id == ad["ad_id"],
+                                                AdSeries.date == ad["date_start"]) \
+                    .update({"impressions": ad["impressions"],
+                             "clicks": ad["clicks"],
+                             "total_spend": ad["spend"],
+                             "video_view": actions.get("video_view", 0),
+                             "comment": actions.get("comment", 0),
+                             "link_click": actions.get("link_click", 0),
+                             "post_reaction": actions.get("post_reaction", 0),
+                             "landing_page_view": actions.get("landing_page_view", 0),
+                             "post_engagement": actions.get("post_engagement", 0),
+                             "leadgen_grouped": actions.get("leadgen_grouped", 0),
+                             "lead": actions.get("lead", 0),
+                             "page_engagement": actions.get("page_engagement", 0),
+                             "onsite_conversion_post_save": actions.get("onsite_conversion_post_save", 0),
+                             "onsite_conversion_lead_grouped": actions.get("onsite_conversion_lead_grouped", 0),
+                             "offsite_conversion_fb_pixel_lead": actions.get("offsite_conversion_fb_pixel_lead", 0),
+                             "frequency": ad["frequency"]})
+
+        session.commit()
+
+    def update_weekly_age_gender(self):
 
         for i in range(1, 8):
             day_decrease = timedelta(days=i)
@@ -150,86 +192,83 @@ class MetaInsights:
             params = {
                 "level": self.level,
                 'time_range': {'since': strdate, 'until': strdate},
+                "breakdowns": ["age","gender"]
             }
 
-            ad_insights_today = self.account.get_insights(params=params,fields=self.fields)
-            ad_insights_today = [dict(item) for item in ad_insights_today]
+            age_gender_weekly = self.account.get_insights(params=params, fields=self.fields)
+            age_gender_weekly = [dict(item) for item in age_gender_weekly]
             actions = {}
-            for ad in ad_insights_today:
-                if ad.get("actions",None):
+            for ad in age_gender_weekly:
+                if ad.get("actions", None):
                     for _type in ad["actions"]:
                         actions[_type["action_type"]] = _type["value"]
 
-                weekly = (update(AdSeries)
-                        .where(AdSeries.ad_id == ad["ad_id"] and AdSeries.date == ad["date_start"])
-                        .values(impressions = ad["impressions"],
-                                     clicks = ad["clicks"],
-                                     total_spend = ad["spend"],
-                                     video_view = actions.get("video_view",0),
-                                     comment = actions.get("comment",0),
-                                     link_click = actions.get("link_click",0),
-                                     post_reaction = actions.get("post_reaction",0),
-                                     landing_page_view = actions.get("landing_page_view",0),
-                                     post_engagement = actions.get("post_engagement",0),
-                                     leadgen_grouped = actions.get("leadgen_grouped",0),
-                                     lead = actions.get("lead",0),
-                                     page_engagement = actions.get("page_engagement",0),
-                                     onsite_conversion_post_save = actions.get("onsite_conversion_post_save",0),
-                                     onsite_conversion_lead_grouped = actions.get("onsite_conversion_lead_grouped",0),
-                                     offsite_conversion_fb_pixel_lead = actions.get("offsite_conversion_fb_pixel_lead",0),
-                                     frequency = ad["frequency"]))
+                session.query(AgeGender).filter(AgeGender.ad_id == ad["ad_id"],
+                                              AgeGender.age == ad["age"],
+                                              AgeGender.gender == ad["gender"],
+                                              AgeGender.date == ad["date_start"]) \
+                    .update({"impressions": ad["impressions"],
+                             "clicks": ad["clicks"],
+                             "total_spend": ad["spend"],
+                             "video_view": actions.get("video_view", 0),
+                             "comment": actions.get("comment", 0),
+                             "link_click": actions.get("link_click", 0),
+                             "post_reaction": actions.get("post_reaction", 0),
+                             "landing_page_view": actions.get("landing_page_view", 0),
+                             "post_engagement": actions.get("post_engagement", 0),
+                             "leadgen_grouped": actions.get("leadgen_grouped", 0),
+                             "lead": actions.get("lead", 0),
+                             "page_engagement": actions.get("page_engagement", 0),
+                             "onsite_conversion_post_save": actions.get("onsite_conversion_post_save", 0),
+                             "onsite_conversion_lead_grouped": actions.get("onsite_conversion_lead_grouped", 0),
+                             "offsite_conversion_fb_pixel_lead": actions.get("offsite_conversion_fb_pixel_lead", 0),
+                             "frequency": ad["frequency"]})
 
+        session.commit()
 
-                session.execute(weekly)
-            session.commit()
-
-
-
-    def update_weekly_age_gender(self):
+    def update_weekly_country(self):
 
         for i in range(1, 8):
             day_decrease = timedelta(days=i)
-            date_to_use = today
+            date_to_use = today - timedelta(days=1)
             date_to_use = date_to_use - day_decrease
-            print(date_to_use)
             strdate = str(date_to_use.year) + '-' + str(date_to_use.month) + '-' + str(date_to_use.day)
 
             params = {
                 "level": self.level,
                 'time_range': {'since': strdate, 'until': strdate},
+                "breakdowns": ["country"]
             }
 
-            ad_insights_today = self.account.get_insights(params=params,fields=self.fields)
-            ad_insights_today = [dict(item) for item in ad_insights_today]
+            country_weekly = self.account.get_insights(params=params, fields=self.fields)
+            country_weekly = [dict(item) for item in country_weekly]
             actions = {}
-            for ad in ad_insights_today:
-                if ad.get("actions",None):
+            for ad in country_weekly:
+                if ad.get("actions", None):
                     for _type in ad["actions"]:
                         actions[_type["action_type"]] = _type["value"]
 
+                session.query(Country).filter(Country.ad_id == ad["ad_id"],
+                                        Country.country == ad["country"],
+                                        Country.date == ad["date_start"])\
+                                      .update({"impressions":ad["impressions"],
+                                               "clicks":ad["clicks"],
+                                               "total_spend":ad["spend"],
+                                               "video_view":actions.get("video_view", 0),
+                                               "comment":actions.get("comment", 0),
+                                               "link_click":actions.get("link_click", 0),
+                                               "post_reaction":actions.get("post_reaction", 0),
+                                               "landing_page_view":actions.get("landing_page_view", 0),
+                                               "post_engagement":actions.get("post_engagement", 0),
+                                               "leadgen_grouped":actions.get("leadgen_grouped", 0),
+                                               "lead":actions.get("lead", 0),
+                                               "page_engagement":actions.get("page_engagement", 0),
+                                               "onsite_conversion_post_save":actions.get("onsite_conversion_post_save", 0),
+                                               "onsite_conversion_lead_grouped":actions.get("onsite_conversion_lead_grouped", 0),
+                                               "offsite_conversion_fb_pixel_lead":actions.get("offsite_conversion_fb_pixel_lead", 0),
+                                               "frequency":ad["frequency"]})
 
-                weekly = (update(AdSeries)
-                        .where(AdSeries.ad_id == ad["ad_id"] and AdSeries.date == ad["age"] and AdSeries.date == ad["gender"] and AdSeries.date == ad["date_start"])
-                        .values(impressions = ad["impressions"],
-                                     clicks = ad["clicks"],
-                                     total_spend = ad["spend"],
-                                     video_view = actions.get("video_view",0),
-                                     comment = actions.get("comment",0),
-                                     link_click = actions.get("link_click",0),
-                                     post_reaction = actions.get("post_reaction",0),
-                                     landing_page_view = actions.get("landing_page_view",0),
-                                     post_engagement = actions.get("post_engagement",0),
-                                     leadgen_grouped = actions.get("leadgen_grouped",0),
-                                     lead = actions.get("lead",0),
-                                     page_engagement = actions.get("page_engagement",0),
-                                     onsite_conversion_post_save = actions.get("onsite_conversion_post_save",0),
-                                     onsite_conversion_lead_grouped = actions.get("onsite_conversion_lead_grouped",0),
-                                     offsite_conversion_fb_pixel_lead = actions.get("offsite_conversion_fb_pixel_lead",0),
-                                     frequency = ad["frequency"]))
-
-
-                session.execute(weekly)
-            session.commit()
+        session.commit()
 
 
 
