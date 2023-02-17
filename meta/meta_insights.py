@@ -270,10 +270,10 @@ class MetaInsights:
                                                "frequency":ad["frequency"]})
 
         session.commit()
+        
+       
 
-
-
-        def update_monthly_ad_series(self):
+    def update_monthly_ad_series(self):
         dt = today - timedelta(days=3)
         year_and_month = monthrange(dt.year,dt.month)
         month_to_use = year_and_month[1]
