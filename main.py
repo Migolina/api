@@ -4,7 +4,6 @@ from facebook_business.adobjects.adsinsights import AdsInsights
 from dotenv import load_dotenv
 import os
 
-from facebook.insights import Insights
 from meta.meta_insights import MetaInsights
 
 
@@ -106,8 +105,8 @@ if __name__ == "__main__":
         level="ad"
         )
 
-    #meta_insights.insert_daily_ad_series()
-    #meta_insights.insert_daily_age_gender()
+    meta_insights.insert_daily_ad_series()
+    meta_insights.insert_daily_age_gender()
     meta_insights.insert_daily_country()
 
 

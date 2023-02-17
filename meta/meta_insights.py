@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from pprint import pprint
-from db import db
 import json
 
 from mysql_orm.models import AdSeries,Ads,AgeGender,Country
@@ -67,6 +66,7 @@ class MetaInsights:
                 for _type in ad["actions"]:
                     actions[_type["action_type"]] = _type["value"]
 
+            pprint(ad)
 
             age_gender = AgeGender(
                 ad_id=ad["ad_id"],

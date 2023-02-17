@@ -1,5 +1,5 @@
 from sqlalchemy.orm import declarative_base,relationship
-from sqlalchemy import Column,Integer,String,Float,ForeignKey
+from sqlalchemy import Column,Integer,String,Float,ForeignKey,PrimaryKeyConstraint
 from sqlalchemy.dialects.mysql import VARCHAR,MEDIUMINT,DATE,BIGINT,FLOAT,SMALLINT
 
 Base = declarative_base()
@@ -42,7 +42,6 @@ class Ads(Base):
 
 class AdSeries(Base):
     __tablename__ = "ad_series"
-    id = Column(MEDIUMINT,primary_key=True,nullable=False)
     ad_id = Column(VARCHAR(250),ForeignKey("ads.ad_id"),nullable=False)
     date = Column(DATE)
     impressions = Column(BIGINT)
@@ -62,10 +61,11 @@ class AdSeries(Base):
     offsite_conversion_fb_pixel_lead = Column(BIGINT)
     frequency = Column(FLOAT)
     ads = relationship("Ads",back_populates="ad_series")
+    __table_args__ = (PrimaryKeyConstraint('ad_id', 'date'),)
+
 
 class AgeGender(Base):
     __tablename__ = "age_and_gender"
-    id = Column(MEDIUMINT,primary_key=True,nullable=False)
     ad_id = Column(VARCHAR(18),ForeignKey("ads.ad_id"),nullable=False)
     age = Column(VARCHAR(5))
     gender = Column(VARCHAR(6))
@@ -87,11 +87,10 @@ class AgeGender(Base):
     offsite_conversion_fb_pixel_lead = Column(BIGINT)
     frequency = Column(FLOAT)
     ads = relationship("Ads", back_populates="age_and_gender")
-
+    __table_args__ = (PrimaryKeyConstraint('ad_id', 'age',"gender","date"),)
 
 class Country(Base):
     __tablename__ = "country"
-    id = Column(MEDIUMINT, primary_key=True, nullable=False)
     ad_id = Column(VARCHAR(18),ForeignKey("ads.ad_id"),nullable=False)
     country = Column(VARCHAR(5))
     date = Column(DATE)
@@ -112,6 +111,7 @@ class Country(Base):
     offsite_conversion_fb_pixel_lead = Column(BIGINT)
     frequency = Column(FLOAT)
     ads = relationship("Ads", back_populates="country")
+    __table_args__ = (PrimaryKeyConstraint('ad_id', 'country',"date"),)
 
 
 
