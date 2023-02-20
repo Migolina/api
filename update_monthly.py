@@ -37,7 +37,6 @@ if __name__ == "__main__":
             level="ad"
             )
 
-        print("Ad series update...")
         meta_insights.update_monthly_ad_series()
         meta_insights.update_weekly_age_gender()
         meta_insights.update_monthly_country()

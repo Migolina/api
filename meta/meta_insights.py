@@ -9,8 +9,6 @@ from mysql_orm import session
 from sqlalchemy import update
 
 
-
-
 class MetaInsights:
     def __init__(self,account,level="ad",fields=None):
         self.account = account
@@ -62,7 +60,6 @@ class MetaInsights:
                 print("Ad series inserted succesfully")
 
             except Exception as e:
-                print(e)
                 logging.error(f"{self.dtime} Exception occurred while inserting ad series: {e}")
                 session.rollback()
 
@@ -113,7 +110,6 @@ class MetaInsights:
                 print("Age gender inserted succesfully")
 
             except Exception as e:
-                print(e)
                 logging.error(f"{self.dtime} Exception occurred while inserting ad series: {e}")
                 session.rollback()
 
@@ -163,7 +159,6 @@ class MetaInsights:
                 print("Countries inserted succesfully")
 
             except Exception as e:
-                print(e)
                 logging.error(f"{self.dtime} Exception occurred while inserting ad series: {e}")
                 session.rollback()
 
@@ -190,11 +185,10 @@ class MetaInsights:
                     for _type in ad["actions"]:
                         actions[_type["action_type"]] = _type["value"]
 
-
                 try:
                     session.query(AdSeries).filter(AdSeries.ad_id == ad["ad_id"],
                                                     AdSeries.date == ad["date_start"]) \
-                        .update({"impressions": ad["impression"],
+                        .update({"impressions": ad["impressions"],
                                  "clicks": ad["clicks"],
                                  "total_spend": ad["spend"],
                                  "video_view": actions.get("video_view", 0),
@@ -216,7 +210,7 @@ class MetaInsights:
                     print("Weekly ad series updated")
 
                 except Exception as e:
-                    error = f"{self.dtime} Exception occurred while inserting age_and_gender: {e}"
+                    error = f"{self.dtime} Exception occurred while updating weekly ad series: {e}"
                     logging.error(error)
                     session.rollback()
 
@@ -272,7 +266,7 @@ class MetaInsights:
                     print("Weekly age gender updated")
 
                 except Exception as e:
-                    error = f"{self.dtime} Exception occurred while inserting age_and_gender: {e}"
+                    error = f"{self.dtime} Exception occurred while updating weekly age_gender: {e}"
                     logging.error(error)
                     session.rollback()
 
@@ -328,7 +322,7 @@ class MetaInsights:
                     print("Weekly countries updated")
 
                 except Exception as e:
-                    error = f"{self.dtime} Exception occurred while inserting age_and_gender: {e}"
+                    error = f"{self.dtime} Exception occurred while updating weekly country: {e}"
                     logging.error(error)
                     session.rollback()
 
@@ -383,7 +377,7 @@ class MetaInsights:
                     print("Monthly ad series updated")
 
                 except Exception as e:
-                    error = f"{self.dtime} Exception occurred while inserting age_and_gender: {e}"
+                    error = f"{self.dtime} Exception occurred while updating monthly ad_series: {e}"
                     logging.error(error)
                     session.rollback()
 
@@ -441,7 +435,7 @@ class MetaInsights:
 
 
                 except Exception as e:
-                    error = f"{self.dtime} Exception occurred while inserting age_and_gender: {e}"
+                    error = f"{self.dtime} Exception occurred while updating monthly age_gender: {e}"
                     logging.error(error)
                     session.rollback()
 
@@ -498,7 +492,6 @@ class MetaInsights:
                     print("Monthly countries updated")
 
                 except Exception as e:
-                    error = f"{self.dtime} Exception occurred while inserting age_and_gender: {e}"
+                    error = f"{self.dtime} Exception occurred while updating monthly country: {e}"
                     logging.error(error)
                     session.rollback()
-
