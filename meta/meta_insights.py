@@ -17,6 +17,7 @@ class MetaInsights:
         self.level = level
         self.fields = fields
         self.today = date.today()
+        self.dtime = str(datetime.now())
 
     def insert_daily_ad_series(self):
         params = {
@@ -62,7 +63,7 @@ class MetaInsights:
 
             except Exception as e:
                 print(e)
-                logging.error(f"Exception occurred while inserting ad series: {e}")
+                logging.error(f"{self.dtime} Exception occurred while inserting ad series: {e}")
                 session.rollback()
 
     def insert_daily_age_gender(self):
@@ -113,7 +114,7 @@ class MetaInsights:
 
             except Exception as e:
                 print(e)
-                logging.error(f"Exception occurred while inserting age_and_gender: {e}")
+                logging.error(f"{self.dtime} Exception occurred while inserting ad series: {e}")
                 session.rollback()
 
     def insert_daily_country(self):
@@ -163,7 +164,7 @@ class MetaInsights:
 
             except Exception as e:
                 print(e)
-                logging.error(f"Exception occurred while inserting age_and_gender: {e}")
+                logging.error(f"{self.dtime} Exception occurred while inserting ad series: {e}")
                 session.rollback()
 
     def update_weekly_ad_series(self):
@@ -215,7 +216,7 @@ class MetaInsights:
                     print("Weekly ad series updated")
 
                 except Exception as e:
-                    error = f"Exception occurred while inserting age_and_gender: {e}"
+                    error = f"{self.dtime} Exception occurred while inserting age_and_gender: {e}"
                     logging.error(error)
                     session.rollback()
 
@@ -271,7 +272,7 @@ class MetaInsights:
                     print("Weekly age gender updated")
 
                 except Exception as e:
-                    error = f"Exception occurred while inserting age_and_gender: {e}"
+                    error = f"{self.dtime} Exception occurred while inserting age_and_gender: {e}"
                     logging.error(error)
                     session.rollback()
 
@@ -327,7 +328,7 @@ class MetaInsights:
                     print("Weekly countries updated")
 
                 except Exception as e:
-                    error = f"Exception occurred while inserting age_and_gender: {e}"
+                    error = f"{self.dtime} Exception occurred while inserting age_and_gender: {e}"
                     logging.error(error)
                     session.rollback()
 
@@ -382,7 +383,7 @@ class MetaInsights:
                     print("Monthly ad series updated")
 
                 except Exception as e:
-                    error = f"Exception occurred while inserting age_and_gender: {e}"
+                    error = f"{self.dtime} Exception occurred while inserting age_and_gender: {e}"
                     logging.error(error)
                     session.rollback()
 
@@ -440,7 +441,7 @@ class MetaInsights:
 
 
                 except Exception as e:
-                    error = f"Exception occurred while inserting age_and_gender: {e}"
+                    error = f"{self.dtime} Exception occurred while inserting age_and_gender: {e}"
                     logging.error(error)
                     session.rollback()
 
@@ -497,7 +498,7 @@ class MetaInsights:
                     print("Monthly countries updated")
 
                 except Exception as e:
-                    error = f"Exception occurred while inserting age_and_gender: {e}"
+                    error = f"{self.dtime} Exception occurred while inserting age_and_gender: {e}"
                     logging.error(error)
                     session.rollback()
 
