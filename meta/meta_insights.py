@@ -3,11 +3,14 @@ from pprint import pprint
 from calendar import monthrange
 import logging
 import json
+from pathlib import Path
 
 from mysql_orm.models import AdSeries,Ads,AgeGender,Country
 from mysql_orm import session
 from sqlalchemy import update
 
+import os
+basedir = str(Path(os.path.dirname(os.path.realpath(__file__))).parent.absolute())
 
 class MetaInsights:
     def __init__(self,account,level="ad",fields=None):
@@ -16,14 +19,15 @@ class MetaInsights:
         self.fields = fields
         self.today = date.today()
         self.dtime = str(datetime.now())
-
+        self.insertion_logs = basedir+"/logs/insertion_errors.logs"
+        self.update_logs = basedir+"/logs/update_errors.logs"
     def insert_daily_ad_series(self):
         params = {
             "level":self.level,
             "date_preset":"yesterday"
         }
 
-        logging.basicConfig(filename='logs/insertion_errors.log', level=logging.ERROR)
+        logging.basicConfig(filename=self.insertion_logs, level=logging.ERROR)
 
         ad_insights_today = self.account.get_insights(params=params,fields=self.fields)
         ad_insights_today = [dict(item) for item in ad_insights_today]
@@ -70,7 +74,7 @@ class MetaInsights:
             "breakdowns":["age","gender"]
         }
 
-        logging.basicConfig(filename='logs/insertion_errors.log', level=logging.ERROR)
+        logging.basicConfig(filename=self.insertion_logs, level=logging.ERROR)
 
         age_gender_today = self.account.get_insights(params=params,fields=self.fields)
         age_gender_today = [dict(item) for item in age_gender_today]
@@ -120,7 +124,7 @@ class MetaInsights:
             "breakdowns":["country"]
         }
 
-        logging.basicConfig(filename='logs/insertion_errors.log', level=logging.ERROR)
+        logging.basicConfig(filename=self.insertion_logs, level=logging.ERROR)
 
         country_today = self.account.get_insights(params=params,fields=self.fields)
         country_today = [dict(item) for item in country_today]
@@ -164,7 +168,7 @@ class MetaInsights:
 
     def update_weekly_ad_series(self):
 
-        logging.basicConfig(filename='logs/update_errors.log', level=logging.ERROR)
+        logging.basicConfig(filename=self.update_logs, level=logging.ERROR)
 
         for i in range(1, 8):
             day_decrease = timedelta(days=i)
@@ -217,7 +221,7 @@ class MetaInsights:
 
     def update_weekly_age_gender(self):
 
-        logging.basicConfig(filename='logs/update_errors.log', level=logging.ERROR)
+        logging.basicConfig(filename=self.update_logs, level=logging.ERROR)
 
         for i in range(1, 8):
             day_decrease = timedelta(days=i)
@@ -273,7 +277,7 @@ class MetaInsights:
 
     def update_weekly_country(self):
 
-        logging.basicConfig(filename='logs/update_errors.log', level=logging.ERROR)
+        logging.basicConfig(filename=self.update_logs, level=logging.ERROR)
 
         for i in range(1, 8):
             day_decrease = timedelta(days=i)
@@ -331,7 +335,7 @@ class MetaInsights:
         dt = self.today - timedelta(days=3)
         year_and_month = monthrange(dt.year,dt.month)
         month_to_use = year_and_month[1]
-        logging.basicConfig(filename='logs/update_errors.log', level=logging.ERROR)
+        logging.basicConfig(filename=self.update_logs, level=logging.ERROR)
 
         for i in range(1, month_to_use):
             day_decrease = timedelta(days=i)
@@ -386,7 +390,7 @@ class MetaInsights:
         dt = self.today - timedelta(days=3)
         year_and_month = monthrange(dt.year, dt.month)
         month_to_use = year_and_month[1]
-        logging.basicConfig(filename='logs/update_errors.log', level=logging.ERROR)
+        logging.basicConfig(filename=self.update_logs, level=logging.ERROR)
 
         for i in range(1, month_to_use):
             day_decrease = timedelta(days=i)
@@ -445,7 +449,7 @@ class MetaInsights:
         dt = self.today - timedelta(days=3)
         year_and_month = monthrange(dt.year, dt.month)
         month_to_use = year_and_month[1]
-        logging.basicConfig(filename='logs/update_errors.log', level=logging.ERROR)
+        logging.basicConfig(filename=self.update_logs, level=logging.ERROR)
 
         for i in range(1, month_to_use):
             day_decrease = timedelta(days=i)
