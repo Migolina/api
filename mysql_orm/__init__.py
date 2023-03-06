@@ -12,10 +12,6 @@ load_dotenv()
 MYSQL_URI = str(os.getenv("MYSQL_URI"))
 
 engine = create_engine(MYSQL_URI)
-#connection = engine.connect()
-
-#Session = sessionmaker()
-#Session.configure(bind=engine)
 
 session = Session(engine)
 
